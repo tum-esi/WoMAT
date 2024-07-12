@@ -1,0 +1,87 @@
+{
+    "title": "coppeliasim_virtual_object_sensor",
+    "id": "urn:dev:ops:32473-virtual-ur3_robot",
+    "description": "The template TD is consumed by WoT server for robotic digital twins",
+    "@context": ["https://www.w3.org/2019/wot/td/v1", { "@language": "en" }],
+    "@type": "Thing",
+    "security": "nosec_sc",
+    "securityDefinitions": { "nosec_sc": { "scheme": "nosec" } },
+    "properties": {
+      "objectPresent": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["dice detected", "dice removal detected"]
+          },
+          "color": {
+            "type": "string",
+            "enum": ["red", "green", "blue", "null"],
+            "description": "Color of the detected object"
+          },
+          "x": {
+            "type": "number",
+            "description": "X coordinate of the detected object"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y coordinate of the detected object"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z coordinate of the detected object"
+          }
+        },
+        "readOnly": true,
+        "observable": true,
+        "description": "Indicates if an object is present in the sensor's field of view",
+        "forms": [
+          {
+            "href": "http://localhost:8083/coppeliasim_virtual_object_sensor/properties/objectPresent",
+            "contentType": "application/json",
+            "op": ["readproperty", "observeproperty"]
+          }
+        ]
+      }
+    },
+    "actions": {
+    }, 
+    "events": {
+      "objectDetected": {
+        "description": "Event to notify when an object is detected",
+        "data": {
+          "type": "object",
+          "properties": {
+            "objectPosition": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Detection status"
+                },
+                "x": {
+                  "type": "number",
+                  "description": "X coordinate of the detected object"
+                },
+                "y": {
+                  "type": "number",
+                  "description": "Y coordinate of the detected object"
+                },
+                "z": {
+                  "type": "number",
+                  "description": "Z coordinate of the detected object"
+                }
+              }
+            }
+          }
+        },
+        "forms": [
+            {
+            "href": "http://localhost:8083/coppeliasim_virtual_object_sensor/events/objectDetectedAtPickup",
+            "contentType": "application/json"
+            }
+          ]
+        }
+      }
+  }
+  

@@ -15,6 +15,7 @@
   "dependencies": {
     "@node-wot/binding-http": "^0.8.12",
     "@node-wot/core": "^0.8.12",
+    "websocket-as-promised": "^2.1.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {

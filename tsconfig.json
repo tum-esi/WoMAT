@@ -5,13 +5,17 @@
     "strict": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src/typescript",
+    "rootDir": "./src/",
+    "allowJs": true,         // Allow JavaScript files to be compiled
+    "declaration": true,     // Generate declaration files (.d.ts)
+    "declarationDir": "./types" // Output directory for declaration files
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
     "*.ts",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.js" // Include JavaScript files
   ]
 }

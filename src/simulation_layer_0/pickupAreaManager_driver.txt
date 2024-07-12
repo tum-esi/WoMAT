@@ -1,0 +1,142 @@
+-- lua
+
+-- manage the creation of new dices in the pickup area when its empty and manage the sensing for the wot.
+
+-- At the beginning of your script
+-- for the watch of creating new dices
+previousDetectionState = nil  -- Nothing detected initially
+-- for the sensor imitation
+previousDetectionStateSensor = nil  -- Nothing detected initially
+
+function sysCall_init()
+    sim = require('sim')
+    --createDice(0.2, 0.4, 0.05)
+    createUniqueDice(0.2, 0.4, 0.05)
+
+    -- Put some initialization code here
+    -- sim.setStepping(true) -- enabling stepping mode
+end
+
+function sysCall_thread()
+    -- Put your main code here, e.g.:
+    --
+    -- while not sim.getSimulationStopping() do
+    --     local p = sim.getObjectPosition(objHandle)
+    --     p[1] = p[1] + 0.001
+    --     sim.setObjectPosition(objHandle, p)
+    --     sim.step() -- resume in next simulation step
+    -- end
+end
+
+-- See the user manual or the available code snippets for additional callback functions and details
+
+function createDice(x, y, z)
+    local size = {0.1, 0.1, 0.1}
+    local mass = 0.1
+    local diceHandle = sim.createPureShape(0, 8, size, mass, nil)
+    sim.setObjectPosition(diceHandle, -1, {x, y, z})
+end
+
+function createUniqueDice(x, y, z)
+    -- Choose of three colors randomly
+    math.randomseed(os.time())  -- Seed the random number generator
+    local colorNames = {"red", "blue", "green"}
+    local chosenColorName = colorNames[math.random(#colorNames)]  -- Randomly pick a color name
+    local colors = {
+        red = {1, 0, 0},    -- Red
+        blue = {0, 0, 1},   -- Blue
+        green = {0, 1, 0}   -- Green
+    }
+    local chosenColor = colors[chosenColorName]  -- Get the RGB values for the chosen color
+
+    -- create the dice object
+    local baseName = "dice_" .. chosenColorName .. "_"
+    local uniqueSuffix = os.time() -- Alternatively, use a counter that increments with each creation
+    local diceName = baseName .. uniqueSuffix
+
+    local size = {0.1, 0.1, 0.1}  -- Size of the dice
+    local mass = 0.1
+    local diceHandle = sim.createPureShape(0, 8, size, mass, nil)
+    sim.setObjectPosition(diceHandle, -1, {x, y, z})  -- Specify the position
+    sim.setObjectName(diceHandle, diceName)
+    sim.setShapeColor(diceHandle, nil, sim.colorcomponent_ambient_diffuse, chosenColor)
+
+    previousDetectionState = "dice removal detected"
+
+    return diceHandle
+end
+
+function sysCall_sensing()
+    local areaCenter = {0.2, 0.4, 0.05}  -- Example area center
+    local areaSize = {0.3, 0.3, 0.3}  -- Example area dimensions
+    
+    local currentDetectionState, diceColor  = isDiceInArea(areaCenter, areaSize)
+
+    if currentDetectionState ~= previousDetectionState then
+        -- The detection state has changed
+        if currentDetectionState then
+            print("Dice detected within the area.")
+            previousDetectionStateSensor = "dice detected"
+        else
+            print("No dice detected within the area.")
+            createUniqueDice(0.2, 0.4, 0.05)  -- Create a new dice if none are detected
+            previousDetectionStateSensor = "dice removal detected"
+        end
+        previousDetectionState = currentDetectionState  -- Update the previous state
+    end
+
+    if not isDiceInArea(areaCenter, areaSize) then
+        --- createNewDice(areaCenter, areaSize)
+        --print("no dice detected in area")
+    end
+end
+
+
+
+function isDiceInArea(areaCenter, areaSize)
+    local objects = sim.getObjectsInTree(sim.handle_scene, sim.object_shape_type, 0)
+    for i = 1, #objects do
+        local objName = sim.getObjectName(objects[i])
+        if string.match(objName, "^dice_") then  -- Check if the object is a dice
+            local objPos = sim.getObjectPosition(objects[i], -1)
+            local inX = objPos[1] >= (areaCenter[1] - areaSize[1]/2) and objPos[1] <= (areaCenter[1] + areaSize[1]/2)
+            local inY = objPos[2] >= (areaCenter[2] - areaSize[2]/2) and objPos[2] <= (areaCenter[2] + areaSize[2]/2)
+            local inZ = objPos[3] >= (areaCenter[3] - areaSize[3]/2) and objPos[3] <= (areaCenter[3] + areaSize[3]/2)
+            if inX and inY and inZ then
+                local firstUnderscorePos = string.find(objName, "_")
+                local secondUnderscorePos = string.find(objName, "_", firstUnderscorePos + 1)
+                if firstUnderscorePos and secondUnderscorePos then
+                    -- Extract the color name between the first and second underscores
+                    local colorName = string.sub(objName, firstUnderscorePos + 1, secondUnderscorePos - 1)
+                    return true, colorName  -- Return true and the color name
+                end
+            end
+        end
+    end
+    return false  -- No dice found in the area
+end
+
+
+function SenseDicePickupArea()
+    local areaCenter = {0.2, 0.4, 0.05}  -- Example area center
+    local areaSize = {0.2, 0.2, 0.2}  -- Example area dimensions
+    
+    local currentDetectionState, diceColor = isDiceInArea(areaCenter, areaSize)
+    local dice_detected = "no changes"
+
+    if currentDetectionState ~= previousDetectionStateSensor then
+        -- The detection state has changed
+        if currentDetectionState then
+            print("Dice sensed at pickup with color: ", diceColor)
+            dice_detected = "dice detected"
+        else
+            print("No dice detected within the area by sensor")
+            dice_detected = "dice removal detected"
+        end
+        previousDetectionStateSensor = currentDetectionState  -- Update the previous state
+    end
+    return dice_detected, diceColor
+end
+
+
+
