@@ -1,0 +1,165 @@
+{
+    "title": "coppeliasim_robot_agent_1",
+    "description": "The agent that controls robot 0 in the CoppeliaSim simulation.",
+    "@context": [
+        "https://www.w3.org/2022/wot/td/v1.1",
+        {"saref": "https://w3id.org/saref#"}
+    ],
+    "securityDefinitions": {
+        "no_sec": {
+            "scheme": "nosec"
+        }
+    },
+    "security": "no_sec",
+    "properties": {
+        "status": {
+            "type": "string",
+            "@type": "testOntology:State",
+            "description": "The status of the robot.",
+            "enum": ["idle", "grippingObject", "holdingObject", "droppingObject", "droppedObject", "broken"],
+            "forms": [{
+                "href": "/properties/status",
+                "htv:methodName": "GET"
+            }]
+        }
+    },
+    "actions": {
+        "homeing": {
+            "description": "Moves the robot to the home position.",
+            "@type": "testOntology:GoHome",
+            "forms": [{
+                "href": "/actions/goHome",
+                "htv:methodName": "POST"
+            }]
+        },
+        "moveAt": {
+            "description": "Moves the robot to a specified position.",
+            "@type": "testOntology:MoveToPosition",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "X_Value": {
+                        "type": "number",
+                        "@type": "testOntology:PositionX",
+                        "description": "The x coordinate of the position to move to."
+                    },
+                    "Y_Value": {
+                        "type": "number",
+                        "@type": "testOntology:PositionY",
+                        "description": "The y coordinate of the position to move to."
+                    },
+                    "Z_Value": {
+                        "type": "number",
+                        "@type": "testOntology:PositionZ",
+                        "description": "The z coordinate of the position to move to."
+                    }
+                },
+                "description": "The position to move to."
+            },
+            "forms": [{
+                "href": "/actions/moveTo",
+                "contentType": "application/json",
+                "htv:methodName": "POST"
+            }]
+        },
+        "take": {
+            "description": "Grabs an object at the current position.",
+            "@type": "testOntology:GrabObject",
+            "forms": [{
+                "href": "/actions/gripObject",
+                "htv:methodName": "POST"
+            }]
+        },
+        "release": {
+            "description": "Drops the object at the current position.",
+            "@type": "testOntology:ReleaseObject",
+            "forms": [{
+                "href": "/actions/dropObject",
+                "htv:methodName": "POST"
+            }]
+        },
+        "askHow": {
+            "description": "Ask the agent for a plan to perform a task.",
+            "input": {
+              "type": "object",
+              "properties": {
+                "planLabel": {        
+                  "type": "string",
+                  "description": "The plan label to ask for a plan without the + (eg. !moveObect, to get the plan for +!moveObect: ..."
+                },
+                "targetTDAdress": {
+                  "type": "string",
+                  "description": "The address of the TD to which the plan shall be mapped."
+                }
+              }
+            },
+            "output": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "description": "A plan object matched to the target TD",
+                    "properties": {
+                        "planLabel": {
+                            "type": "string",
+                            "description": "The plan label of the plan object."
+                        },
+                        "planInput": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "description": "The input the plan needs"
+                            }
+                        },
+                        "planSteps": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "description": "The steps of the plan (similar structure to a TD action)."
+                            }
+                        }
+                    }
+                }                
+            },
+            "forms": [{
+                "href": "/actions/askPlan",
+                "contentType": "application/json"
+            }]
+        },
+        "tell": {
+            "description": "Tell/inform the agent of some belief. This gets stored in the agent's belief base. ",
+            "input": {
+              "type": "object",
+              "properties": {
+                "belief": {
+                  "type": "string",
+                  "description": "The belief to store in the agent's belief base."
+                }, 
+                "values": {
+                    "type": "array",
+                    "items": {
+                      "types": ["string", "number", "boolean"],
+                      "description": "The value of the belief to store in the agent's belief base."
+                    }
+                }
+              },
+              "required": ["belief"],
+              "additionalProperties": true
+            },
+            "forms": [{
+              "href": "/actions/tell",
+              "contentType": "application/json"
+            }]
+          },
+        "send": {
+            "description": "Send a message to the agent. ",
+            "input": {
+              "type": "object"
+            },
+            "forms": [{
+              "href": "/actions/send",
+              "contentType": "application/json"
+            }]
+          }
+    }
+
+}

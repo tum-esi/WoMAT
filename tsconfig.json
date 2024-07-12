@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src/typescript",
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "*.ts",
+    "src/**/*.ts"
+  ]
+}

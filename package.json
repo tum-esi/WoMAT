@@ -1,0 +1,23 @@
+{
+  "name": "wot-agent-communication",
+  "version": "1.0.0",
+  "description": "This project is a mashup of a [CArtAgO](https://sourceforge.net/projects/cartago/) artifact for [JaCoMo](https://github.com/jacamo-lang/jacamo) and [node-wot](https://www.thingweb.io/). \r It enables agents to communicate via Web of Things protocols and discover other agents and what they are capable of using a Thing Description.",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@node-wot/binding-http": "^0.8.12",
+    "@node-wot/core": "^0.8.12",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10"
+  }
+}

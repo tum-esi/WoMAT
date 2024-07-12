@@ -1,0 +1,17 @@
+{
+    "objectSensor": {
+        "websocketPort": 8094,
+        "TDPort": 8084,
+        "staticAddress": "192.168.56.1"
+    },
+    "robotArm0": {
+        "websocketPort": 8095,
+        "TDPort": 8085,
+        "staticAddress": "192.168.56.1"
+    },
+    "robotArm1": {
+        "websocketPort": 8096,
+        "TDPort": 8086,
+        "staticAddress": "192.168.56.1"
+    }
+}
