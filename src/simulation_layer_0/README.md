@@ -1,5 +1,7 @@
 # Two Robot Arm simulation
 
+This simulation needs Coppeliasim installed and running. 
+
 This setup is designed for two robot arms to interact with each other.
 The robots can be controlled by higher level Things and especially agents.
 

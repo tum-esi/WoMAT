@@ -58,8 +58,8 @@ A video of this demonstration can be seen at [Demo Video]("/WoMAT Demo.mp4")
 ## Run the Simulation 
 1. Start Coppeliasim
 2. Start the Robot wot server (this also loads the Coppeliasim scene).
-```cd .\Robot_WoT_server
-ts-node .\2_Robot_wot_server.ts
+```
+node .\dist\simulation_layer_0\2_Robot_wot_server.js
 ```
 
 3. Once the TDs of the robot arms are exposed we can run all the necessarey *AgentThing* instances to expose the agent TDs for the robot arms and the sensor.
@@ -67,9 +67,9 @@ The sensor is not connected to a JaCoMo agent, but is implemented as a conventio
 Built the js files with `tsc` and run every agent TD in a seprate console:
 
 ```
-node .\dist\robot_simulation\sim_objec_sensor_agent.js
-node .\dist\robot_simulation\robot_agent_1.js
-node .\dist\robot_simulation\robot_agent_0.js
+node .\dist\WoT\robot_simulation\sim_objec_sensor_agent.js
+node .\dist\WoT\robot_simulation\robot_agent_0.js
+node .\dist\WoT\robot_simulation\robot_agent_1.js
 ```
 
 Then finally start the agents with `./gradlew`. 
