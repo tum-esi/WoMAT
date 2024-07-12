@@ -78,8 +78,8 @@ function delay(ms: number) {
 
 async function main() {
     
-        const path2TD = "./../src/td/robot_simulation/object_sensor.td.json";
-        const config = require("./../../config.json");
+        const path2TD = "./../../src/td/robot_simulation/object_sensor.td.json";
+        const config = require("./../../../config.json");
     
         let initialKnownAgents = {};
         let sensorAgent = new ObjectSensorAgentThing(config.objectSensor, path2TD, initialKnownAgents);

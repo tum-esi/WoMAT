@@ -2,10 +2,10 @@
 import { RobotAgentThing } from "./robot_agents";
 
 async function main() {
-        const config = require("./../../config.json");
+        const config = require("./../../../config.json");
 
         // start robot 0 agent td
-        const ownTD = "./../src/td/robot_simulation/robot_0.td.json"; 
+        const ownTD = "./../../src/td/robot_simulation/robot_0.td.json"; 
         const lowerLayerAddress0 = "http://192.168.56.1:8081/coppeliasim_virtualrobot_ur3_robot_0";   
         let initialKnownAgents0 = {
             "coppeliasim_sensor_agent": "http://192.168.56.1:8084/coppeliasim_sensor_agent", 
