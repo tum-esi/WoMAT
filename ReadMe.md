@@ -51,22 +51,23 @@ run `./gradlew` to execute the agent part.
 
 # Example Simulation
 To show a usecase of this framework, we have developed a with two robots arms in [Coppeliasim](https://www.coppeliarobotics.com/).
-Via [RobWot](https://gitlab.lrz.de/tum-ei-esi/wot-team/robwot) the robot arms and a sensor identifying new objects are exposed as TDs.
+The devices of layer 0 (2 robot arms and a sensor identifying new objects) are exposed as TDs.
 
-A video of this demonstration can be seen at [Demo Video]("/WoMAT Demo.mp4")
+A video of this demonstration can be seen at [Demo Video](/WoMAT_Application_Demo.mp4)
+The performance of our framework is evaluated in [Performance Evaluation](/performance_log/ReadMe.md)
 
 ## Run the Simulation 
 1. Start Coppeliasim
-2. Start the Robot wot server (this also loads the Coppeliasim scene).
+2. Start the layer 0 Things (this also loads the Coppeliasim scene).
 ```
 node .\dist\simulation_layer_0\2_Robot_wot_server.js
 ```
 
 3. Once the TDs of the robot arms are exposed we can run all the necessarey *AgentThing* instances to expose the agent TDs for the robot arms and the sensor.
 The sensor is not connected to a JaCoMo agent, but is implemented as a conventional Thing. This shows that agents can don't need to distinguish between other Agent Things and conventional Things for normal communication (no plan exchange).
-Built the js files with `tsc` and run every agent TD in a seprate console:
+Built the js files with `tsc` and run  agent TD in a seprate console:
 
-```
+```every
 node .\dist\WoT\robot_simulation\sim_objec_sensor_agent.js
 node .\dist\WoT\robot_simulation\robot_agent_0.js
 node .\dist\WoT\robot_simulation\robot_agent_1.js

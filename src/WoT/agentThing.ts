@@ -3,18 +3,7 @@ import { Servient, Helpers, ExposedThing } from "@node-wot/core";
 import { HttpServer } from "@node-wot/binding-http";
 import { HttpClientFactory } from "@node-wot/binding-http";
 
-import { planString2OntologyPlanObject, OntologyPlanObject2TargetPlanObject, TargetPlanObject2CommandString, AdditionalOntology, planLabel2OntologyLabel, ontologyLabel2planLabel } from "./plan_translator";
-
-import * as fs from 'fs';
-// Function to log data to a file
-function logToFile(filename: string, data: string) {
-    fs.appendFileSync("performance_log/" + filename, data + '\n', (err) => {
-        if (err) throw err;
-    });
-}
-
-logToFile("translation_time.txt", "Start logging translation times");
-
+import { planString2OntologyPlanObject, OntologyPlanObject2TargetPlanObject, TargetPlanObject2CommandString, AdditionalOntology, planLabel2OntologyLabel, ontologyLabel2planLabel } from "./archive/plan_translator";
 
 
 export class AgentThing {
@@ -164,21 +153,12 @@ export class AgentThing {
 
         // overwrite the auto set handlers
         producer.setActionHandler("askHow", async (params: any) => {
-            let total_execution_time = 0;
-            let label_translation_time = 0;
-            let plan_translation_time = 0;
-            let end_time = 0
-            let total_start = performance.now();
-
-
             let input = await params.value();
             let planLabel = input["planLabel"];
-            let label_start_time = performance.now();
             planLabel = ontologyLabel2planLabel(planLabel, this.additionalOntology);
-            label_translation_time = performance.now() - label_start_time;
             let targetTDAdress = input["targetTDAdress"];
-            // if (this.logginLevel > 1) { console.log("Action askHow for planLabel: ", planLabel, " and target TD: ", targetTDAdress); }
-            // else if (this.logginLevel > 0) { console.log("Action askHow was invoked for planLabel: ", planLabel); }
+            if (this.logginLevel > 1) { console.log("Action askHow for planLabel: ", planLabel, " and target TD: ", targetTDAdress); }
+            else if (this.logginLevel > 0) { console.log("Action askHow was invoked for planLabel: ", planLabel); }
             // first ask the agent for the plans matching the label
             let content = {"keyword": "{ +" + planLabel + "} "};  // adjust the plan Trigger to match the literal needed in .relevant_plans
             let agentMessage = new AgentMessage("askHow", "", "", content);
@@ -191,21 +171,15 @@ export class AgentThing {
                 let [target_td, otherAgent] = await this.fetchAgentTD(targetTDAdress);
                 let response = [];
                 for (let planString of data.content ) {
-                    let plan_translation_start_time = performance.now();
                     if (planString.includes("wotExchangable")) {
                         let reduced = this.stripMetadataFromPlanString(planString);
                         let planStringOntology = planString2OntologyPlanObject(reduced, TDparsed, this.additionalOntology);
                         let targetPlanObject = OntologyPlanObject2TargetPlanObject(planStringOntology, target_td);
                         response.push(targetPlanObject);
                     }
-                    plan_translation_time = performance.now() - plan_translation_start_time;
                 } 
                 if (this.logginLevel == 1) { console.log("Plans found for planLabel: ", planLabel, " and targetTD: ", targetTDAdress); }
                 else if (this.logginLevel >= 2) { console.log("Plans found for planLabel: ", planLabel, " and targetTD: ", targetTDAdress, " : ", response); }
-                total_execution_time = performance.now() - total_start;
-                let log_message = "label: " + planLabel + " label_translation_time: " + label_translation_time + " plan_translation_time: " + plan_translation_time + " total_execution_time: " + total_execution_time;
-                console.log(log_message);
-                logToFile("translation_time_1.txt", log_message);
                 return response;
             }
         });
