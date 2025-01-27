@@ -3,7 +3,7 @@ import { Servient, Helpers, ExposedThing } from "@node-wot/core";
 import { HttpServer } from "@node-wot/binding-http";
 import { HttpClientFactory } from "@node-wot/binding-http";
 
-import { planString2OntologyPlanObject, OntologyPlanObject2TargetPlanObject, TargetPlanObject2CommandString, AdditionalOntology, planLabel2OntologyLabel, ontologyLabel2planLabel } from "./archive/plan_translator";
+import { planString2OntologyPlanObject, OntologyPlanObject2TargetPlanObject, TargetPlanObject2CommandString, AdditionalOntology, planLabel2OntologyLabel, ontologyLabel2planLabel } from "./plan_translator";
 
 
 export class AgentThing {
@@ -21,7 +21,7 @@ export class AgentThing {
     protected additionalOntology: AdditionalOntology;  // for plan labels and input that shall be translated (not in TD)
     public logginLevel: number = 1;  // 0: log erros, 1: log erros and IA on me / when I invoke IA on others, 2: log IAs with longer input/output, 3: log everything (also messages to wotCommunicator)
 
-    constructor(config: any, path2TD: string, initialKnownAgents: { [key: string]: string}, additionalOntology: AdditionalOntology) { // later also TD?
+    constructor(config: any, path2TD: string, initialKnownAgents: { [key: string]: string}, additionalOntology: AdditionalOntology = {}) { // later also TD?
         this.thingConfig = config;
         this.thingDescrpiption = require(path2TD);
         this.servient = new Servient();
@@ -330,6 +330,7 @@ export class AgentThing {
                         }
                     } else if (observe == false && this.subscriptions[targetAgentName][keyword] != undefined) {
                         // stop observing
+                        // ToDo: handle if not observing
                         if (this.logginLevel > 0) { console.log("Stop observing: ", keyword);}
                         let subscription = this.subscriptions[targetAgentName][keyword];
                         await subscription.stop();

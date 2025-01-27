@@ -32,7 +32,7 @@ export class AgentThing {
     protected additionalOntology: AdditionalOntology;  // for plan labels and input that shall be translated (not in TD)
     public logginLevel: number = 1;  // 0: log erros, 1: log erros and IA on me / when I invoke IA on others, 2: log IAs with longer input/output, 3: log everything (also messages to wotCommunicator)
 
-    constructor(config: any, path2TD: string, initialKnownAgents: { [key: string]: string}, additionalOntology: AdditionalOntology) { // later also TD?
+    constructor(config: any, path2TD: string, initialKnownAgents: { [key: string]: string}, additionalOntology: AdditionalOntology = {}) { // later also TD?
         this.thingConfig = config;
         this.thingDescrpiption = require(path2TD);
         this.servient = new Servient();
