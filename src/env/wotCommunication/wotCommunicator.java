@@ -194,6 +194,47 @@ public class wotCommunicator extends Artifact{
         log("["+this.Name+"] " + "WebSocket client created");
     }
 
+    private String mapToKeyValueString(Map<String, Object> mapVal) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, Object> e : mapVal.entrySet()) {
+            if (!first) {
+                sb.append(",");
+            }
+            first = false;
+            String key = e.getKey();      // e.g. "drinkId"
+            Object valObj = e.getValue(); // e.g. "cappuccino" or 2
+    
+            // Convert the value to a string
+            String valStr = valueToString(valObj);
+            
+            // Produce "key(value)" style, e.g. "drinkId(cappuccino)"
+            sb.append(key).append("(").append(valStr).append(")");
+        }
+        return sb.toString();
+    }
+    
+    private String valueToString(Object val) {
+        if (val == null) {
+            return "null";
+        } else if (val instanceof String) {
+            // e.g. "cappuccino"
+            // maybe lowercase the first char, similar to your code
+            String str = (String) val;
+            if (!str.isEmpty()) {
+                str = str.substring(0,1).toLowerCase() + str.substring(1);
+            }
+            return str;
+        } else if (val instanceof Number || val instanceof Boolean) {
+            // e.g. 2 or true
+            return val.toString();
+        } else {
+            // fallback
+            return val.toString(); 
+        }
+    }
+    
+    
     String generateValueTerm(Object valuesObj, Number messageID) {
         // create a string term of the values and the message ID that can be used to add the values to the term to add to the agents belief base
         String valuesAsString = "";
@@ -232,7 +273,14 @@ public class wotCommunicator extends Artifact{
                     valuesAsString += (Number) valuesObj;
                 }
             
-            } else {
+            } else if (valuesObj instanceof Map) {
+                // parse the map into "key(val), key(val2)" style
+                @SuppressWarnings("unchecked")
+                Map<String, Object> mapVal = (Map<String, Object>) valuesObj;
+                String mapAsString = mapToKeyValueString(mapVal);
+                valuesAsString += mapAsString;
+            } 
+            else {
                 log("Error: Unsupported type for 'values': " + valuesObj.getClass());
             }
         }

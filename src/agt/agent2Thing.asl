@@ -9,6 +9,7 @@ drink1(object(drinkId(cappuccino), size(l), quantity(2))).
     .wait(3000);
     .print("Asking for stattus");
     wotAskOne("coffeeMachine1", "status", "properties");
+    wotAskOne("coffeeMachine1", "allAvailableResources", "properties");
     .print("Asked coffeeMachine1").
 
 +status(idle)[source(coffeeMachine1)]: true <-
