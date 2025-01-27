@@ -62,7 +62,10 @@ task run (type: JavaExec, dependsOn: 'classes') {
         mkdir 'log'
     }
     mainClass = 'jacamo.infra.JaCaMoLauncher'
-    args 'woTCommunication.jcm'
+    // args 'woTCommunication.jcm'
+    // args 'agent2ThingCommunication.jcm'
+    def jcmFile = project.hasProperty('jcm') ? project.jcm : 'woTCommunication.jcm'
+    args jcmFile
     // jvmArgs '-Xss15m'
     classpath sourceSets.main.runtimeClasspath
 }

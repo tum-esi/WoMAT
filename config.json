@@ -13,5 +13,10 @@
         "websocketPort": 8096,
         "TDPort": 8086,
         "staticAddress": "localhost"
+    },
+    "agent2Thing": {
+        "websocketPort": 8097,
+        "TDPort": 8087,
+        "staticAddress": "localhost"
     }
 }
