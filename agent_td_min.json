@@ -1,0 +1,15 @@
+{"@type": "thing",
+"title": "robot agent",
+"@context": [{"eO": "exampleOntology"}],
+"properties": { "state": { "@type": "eO:State" }},
+"actions": {
+  "goHome": { "@type": "eO:GoHome"},
+  "moveTo": { "@type": "eO:MoveToPosition",
+    "input": { "properties": { 
+      "x": { "@type": "eO:PositionX"}, 
+      "y": {  "@type": "eO:PositionY"}, 
+      "z": {  "@type": "eO:PositionZ"} }}},
+  "gripObject": { "@type": "eO:GrabObject" },
+  "dropObject": { "@type": "eO:ReleaseObject"},
+  "askHow": {},
+  "tell": {} }}

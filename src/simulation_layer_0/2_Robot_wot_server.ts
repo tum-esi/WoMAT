@@ -74,7 +74,7 @@ class SimulationThings {
             server1.start().then(async (WoT) => {
                 await this.connectRobotThing2Simulation(WoT, sim, "/ur3_robot_0");
             });
-            console.log("Robot 0 exposed on 192.168.56.1:8081");
+            console.log("Robot 0 exposed on localhost:8081");
 
             let server2 = new Servient();
             server2.addServer(
@@ -85,7 +85,7 @@ class SimulationThings {
             server2.start().then(async (WoT) => {
                 await this.connectRobotThing2Simulation(WoT, sim, "/ur3_robot_1");
             });
-            console.log("Robot 1 exposed on 192.168.56.1:8082");
+            console.log("Robot 1 exposed on localhost:8082");
 
             // add "sensor" servients
             let server3 = new Servient();
@@ -96,7 +96,7 @@ class SimulationThings {
             );
             let wot = await server3.start();
             let [thing, sensorScriptHandle] = await this.connectSensor(wot, sim);
-            console.log("Sensor exposed on  192.168.56.1:8083");
+            console.log("Sensor exposed on localhost:8083");
 
             // wait until everything is running
             await delay(1000);

@@ -7,10 +7,10 @@ async function main() {
         // start robot 1 agent td
         // const ownTD1 = "./../src/td/robot_simulation/robot_1.td.json";
         const ownTD1 = "./../../src/td/robot_simulation/robot_1_other_names.td.json";
-        const lowerLayerAddress1 = "http://192.168.56.1:8082/coppeliasim_virtualrobot_ur3_robot_1";
+        const lowerLayerAddress1 = "http://localhost:8082/coppeliasim_virtualrobot_ur3_robot_1";
         let initialKnownAgents1 = {
-            "coppeliasim_sensor_agent": "http://192.168.56.1:8084/coppeliasim_sensor_agent", 
-            "coppeliasim_robot_agent_0": "http://192.168.56.1:8085/coppeliasim_robot_agent_0"
+            "coppeliasim_sensor_agent": "http://localhost:8084/coppeliasim_sensor_agent", 
+            "coppeliasim_robot_agent_0": "http://localhost:8085/coppeliasim_robot_agent_0"
         };
         const additionalOntology = {
             "blue": "ObjectBlue",

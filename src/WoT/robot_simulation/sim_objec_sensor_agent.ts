@@ -31,7 +31,7 @@ class ObjectSensorAgentThing extends AgentThing {
     
     async run (): Promise<boolean> {
 
-        let TD2Consume = "http://192.168.56.1:8083/coppeliasim_virtual_object_sensor"
+        let TD2Consume = "http://localhost:8083/coppeliasim_virtual_object_sensor"
         const [td, lowerThing] = await this.fetchAgentTD(TD2Consume);
 
         lowerThing.readProperty("objectPresent").then(async (data: any) => {

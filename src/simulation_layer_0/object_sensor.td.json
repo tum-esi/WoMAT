@@ -1,7 +1,7 @@
 {
     "title": "coppeliasim_virtual_object_sensor",
     "id": "urn:dev:ops:32473-virtual-ur3_robot",
-    "description": "The template TD is consumed by WoT server for robotic digital twins",
+    "description": "The Sensor that can detect wheather an object is present or not",
     "@context": ["https://www.w3.org/2019/wot/td/v1", { "@language": "en" }],
     "@type": "Thing",
     "security": "nosec_sc",
