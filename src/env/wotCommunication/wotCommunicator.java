@@ -26,6 +26,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.icu.impl.UResource.Array;
 
+import wotCommunication.JasonTermParser;
+import jason.asSyntax.*;
+
+import jason.asSyntax.parser.ParseException;
+
 
 enum AgentInteractionAffordances {
     TELL("tell"),
@@ -424,15 +429,15 @@ public class wotCommunicator extends Artifact{
         wotAskAll(keyword, path, false);
     }
 
-    @OPERATION void wotAchieve(String targetAgentName, String keyword, Object value) {
-        /* Invoke the action keyword of agent targetAgentName without a value (only String, Integer or Boolean are supported as value)
-         * The keyword without the ":" is the believe which gets added as a response to the agent.
-         */
-        Map<String, Object> content = new HashMap<>();
-        content.put("keyword", keyword);
-        content.put("value", value);
-        wotSend("achieve", targetAgentName, content);
-    }
+    // @OPERATION void wotAchieve(String targetAgentName, String keyword, Object value) {
+    //     /* Invoke the action keyword of agent targetAgentName without a value (only String, Integer or Boolean are supported as value)
+    //      * The keyword without the ":" is the believe which gets added as a response to the agent.
+    //      */
+    //     Map<String, Object> content = new HashMap<>();
+    //     content.put("keyword", keyword);
+    //     content.put("value", value);
+    //     wotSend("achieve", targetAgentName, content);
+    // }
     
     @OPERATION void wotAchieve(String targetAgentName, String keyword) {
         /* Invoke the action keyword of agent targetAgentName without any value.
@@ -443,6 +448,40 @@ public class wotCommunicator extends Artifact{
         content.put("value", null);
         wotSend("achieve", targetAgentName, content);
     }
+
+    @OPERATION
+    public void wotAchieve(String targetAgentName, String keyword, String dataStr) {
+        log("Got the string: " + dataStr);
+
+        // 1) Parse the string into a Jason Term (structure, list, etc.) if desired
+        Term parsedTerm = null;
+        try {
+            parsedTerm = ASSyntax.parseTerm(dataStr);
+        } catch (ParseException e) {
+            log("Could not parseTerm: " + e.getMessage());
+            // handle the error or fallback
+        }
+
+        // 2) If parse succeeded, convert it to a Java object (Map, List, etc.)
+        //    using your existing JasonTermParser (if you want to parse it into JSON-like structure).
+        Object parsedValue = null;
+        if (parsedTerm != null) {
+            parsedValue = JasonTermParser.parseTerm(parsedTerm);
+        }
+
+        // 3) Put the result in a Map (or do whatever wotSend expects)
+        Map<String, Object> content = new HashMap<>();
+        content.put("keyword", keyword);
+        content.put("value", parsedValue != null ? parsedValue : dataStr);
+
+        // 4) Now send it
+        wotSend("achieve", targetAgentName, content);
+    }
+
+    public void log(String msg) {
+        System.out.println("[WotComm] " + msg);
+     }
+
 
     @OPERATION void wotAskHow(String targetAgentName, String planLabel) {
         Map<String, Object> content = new HashMap<>();
