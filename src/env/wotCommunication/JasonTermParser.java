@@ -35,26 +35,40 @@ public class JasonTermParser {
                     return d;
                 }
             } catch (Exception e) {
-                // fallback to string
-                return term.toString();
+                return term.toString();  // fallback to string
             }
         }
-
-        // Structures like object(...), or key(value)
+    
+        // Structures like object(...), array(...), or key(value)
         if (term.isStructure()) {
             Structure s = (Structure) term;
             int arity = s.getArity();
-
-            // e.g., object(drinkId(cappuccino), size(l), quantity(2)) => we treat as Map
+            String functor = s.getFunctor();
+    
+            // Special case for arrays
+            if (functor.equals("array")) {
+                List<Object> jsonArray = new ArrayList<>();
+                for (int i = 0; i < arity; i++) {
+                    Term element = s.getTerm(i);
+                    jsonArray.add(parseTerm(element));  // Recursively parse each element
+                }
+                return jsonArray;  // Return as JSON array
+            }
+    
+            // Handle object(...) as JSON object (Map)
+            if (functor.equals("object")) {
+                return parseMultiArgStructure(s);
+            }
+    
+            // Generic structure handling (e.g., key(value))
             if (arity > 0) {
                 return parseMultiArgStructure(s);
             } else {
-                // zero-arity structure => treat functor as a string
-                return s.getFunctor();
+                return s.getFunctor();  // zero-arity structure => treat functor as a string
             }
         }
-
-        // List
+    
+        // List handling
         if (term.isList()) {
             List<Object> list = new ArrayList<>();
             ListTerm lt = (ListTerm) term;
@@ -63,7 +77,7 @@ public class JasonTermParser {
             }
             return list;
         }
-
+    
         // Atom/string => check for boolean or null keywords
         String valStr = term.toString().replace("\"", "").toLowerCase();
         if (valStr.equals("true")) {
@@ -73,8 +87,7 @@ public class JasonTermParser {
         } else if (valStr.equals("null")) {
             return null;
         } else {
-            // default = string
-            return term.toString().replace("\"", "");
+            return term.toString().replace("\"", "");  // default = string
         }
     }
 
