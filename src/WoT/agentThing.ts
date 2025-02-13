@@ -373,6 +373,16 @@ export class AgentThing {
                     }
                     // if the action has an output, return the output to the agent
                     // ToDo: this is not yet implemented
+                    let output = null;
+                    try {
+                        output = await data.value();
+                    } catch (error)
+                    {
+                        console.log("Achieve: ", agentMessage.content, " failed. Output: ", output);
+                    }
+                    
+                    if (this.logginLevel > 0) {console.log("Achieve: ", agentMessage.content, "at ", targetAgentName, " was successful. Output: ", output);}
+                    this.addBelief2Agent(keyword, output, false, targetAgentName);
                 
                 } else if (performative == "tell") {
                     // if this tell is a property of my own, change the value in the property and emitPropertyChange if its observeable
