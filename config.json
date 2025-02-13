@@ -18,5 +18,25 @@
         "websocketPort": 8097,
         "TDPort": 8087,
         "staticAddress": "localhost"
+    },
+    "conveyor1": {
+        "websocketPort": 8098,
+        "TDPort": 8088,
+        "staticAddress": "localhost"
+    },
+    "conveyor2": {
+        "websocketPort": 8099,
+        "TDPort": 8089,
+        "staticAddress": "localhost"
+    },
+    "uarm": {
+        "websocketPort": 8100,
+        "TDPort": 8090,
+        "staticAddress": "localhost"
+    },
+    "ur10": {
+        "websocketPort": 8101,
+        "TDPort": 8091,
+        "staticAddress": "localhost"
     }
 }

@@ -1,0 +1,66 @@
+{
+    "title": "ur10 Agent",
+    "description": "The agent that controls the conveyor belt 1 in the manufacturing demo",
+    "@context": [
+        "https://www.w3.org/2022/wot/td/v1.1",
+        {"saref": "https://w3id.org/saref#"}
+    ],
+    "securityDefinitions": {
+      "no_sec": {
+          "scheme": "nosec"
+      }
+  },
+  "security": "no_sec",
+    "properties": { 
+    },
+    "actions": {
+        "tell": {
+            "description": "Tell/inform the agent of some believe. This gets stored in the agent's belief base. ",
+            "input": {
+              "type": "object",
+              "properties": {
+                "believe": {
+                  "type": "string",
+                  "description": "The believe to store in the agent's belief base."
+                }
+              },
+              "required": ["believe"],
+              "additionalProperties": true
+            },
+            "forms": [{
+              "href": "/actions/tell",
+              "contentType": "application/json"
+            }]
+          },
+          "askHow": {
+              "description": "Tell the agent how to perform a task.",
+              "input": {
+                "type": "string",
+                "description": "The plan label to ask how to perform without the + (eg. !moveObect, to get the plan for +!moveObect: ..."
+              },
+              "output": {
+                  "type": "array",
+                  "items": {
+                      "type": "string"
+                  },
+                  "description": "A list of all the planstrings that match the input label."
+              },
+              "forms": [{
+                  "href": "/actions/askHow",
+                  "contentType": "application/json"
+              }]
+          },
+        "send": {
+            "description": "Send a message to the agent. ",
+            "input": {
+              "type": "object"
+            },
+            "forms": [{
+              "href": "/actions/send",
+              "contentType": "application/json"
+            }]
+          }
+    },
+    "events": {
+    }
+}
