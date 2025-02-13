@@ -337,10 +337,14 @@ public class wotCommunicator extends Artifact{
                 return;
             }
             // Get the values from the contentMap
-            // Object valuesObj = contentMap.get("values");
-            String valuesAString = generateValueTerm(valuesObj, messageId);
-            // create the signal string
-            String signalString = keyword + valuesAString + "[source(" + source + ")]";
+            String valuesAString, signalString;
+            if (valuesObj == null) {
+                valuesAString = "";
+                signalString = keyword + "[source(" + source + ")]";
+            } else {
+                valuesAString = generateValueTerm(valuesObj, messageId);
+                signalString = keyword + "(object" + valuesAString + ")[source(" + source + ")]";
+            }            
             signal("addBelief", signalString);
 
         } else if (performative.equals("ask")) {
