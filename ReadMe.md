@@ -98,3 +98,15 @@ Consuming other Agent TDs:
 
 The **source** is always added and can be accessed with `[source(Source)]`. In the exposed functions, source is set to "unknown" because this is not logged from Exposed TD.
 
+# Add a new usecase
+1. Create a `.jcm` file.
+2. create your `.asl` files
+   1. Include the following lines:
+   ```
+   { include("wotPlans.asl") }
+   // This import is cruitial to work with artifacts. 
+   { include("$jacamo/templates/common-cartago.asl") }
+   ```
+3. adapt the `config.json`
+4. 
+
